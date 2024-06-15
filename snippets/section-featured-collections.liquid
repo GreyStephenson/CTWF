@@ -59,6 +59,14 @@
       </div>
     {%- endif -%}
   </div>
+
+  {%- if section.settings.button_text != blank -%}
+    <div class="media-with-text__content-button text-center">
+      <a href="{{ section.settings.button_link }}" class="btn">
+        {{ section.settings.button_text }}
+      </a>
+    </div>
+  {%- endif -%}
 </div>
 
 {%- if divider -%}</div>{%- endif -%}
