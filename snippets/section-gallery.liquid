@@ -1,0 +1,120 @@
+{% # components v2.10.62 | Copyright © 2024 Archetype Themes Limited Partnership  | "Shopify Theme Store (https://www.shopify.com/legal/terms#9-additional-services)" License  %}
+{%- comment -%}
+  Renders the gallery section.
+
+  Accepts:
+  - heading {string} - The heading text
+  - heading_size {string} - The heading size
+  - text_alignment {'left'|'center'|'right'} - The text alignment
+  - images_per_row {2-5} - Number of images per row
+  - full_width {boolean} - Whether the gallery should be full width
+  - space_above {boolean} - Whether to add space above the gallery
+  - space_below {boolean} - Whether to add space below the gallery
+  - gutter_size {number} - The gutter size
+
+  Usage:
+  {% render 'section-gallery' %}
+{%- endcomment -%}
+
+{%- liquid
+  assign heading = heading | default: section.settings.heading | default: 'Gallery'
+  assign heading_size = heading_size | default: section.settings.heading_size | default: 'h2'
+  assign text_alignment = text_alignment | default: section.settings.text_alignment | default: 'center'
+  assign images_per_row = images_per_row | default: section.settings.images_per_row | default: 5
+  assign full_width = full_width | default: section.settings.full_width, allow_false: true | default: false, allow_false: true
+  assign space_above = space_above | default: section.settings.space_above, allow_false: true | default: true, allow_false: true
+  assign space_below = space_below | default: section.settings.space_below, allow_false: true | default: true, allow_false: true
+  assign gutter_size = gutter_size | default: section.settings.gutter_size | default: 20
+
+  assign lazyload_images = true
+
+  if section.index == 1
+    assign lazyload_images = false
+  endif
+
+  capture grid_view
+    render 'grid-view-type', products_per_row: images_per_row
+  endcapture
+-%}
+
+<section
+  class="gallery gallery--full-width-{{ full_width }}"
+  style="
+    --gallery-grid-spacing: {{ gutter_size }}px;
+    {% if space_above %}
+      --gallery-space-above: var(--indexSectionPadding);
+    {% endif %}
+    {% if space_below %}
+      --gallery-space-below: var(--indexSectionPadding);
+    {% endif %}
+  "
+>
+  {% unless heading == blank %}
+    <div class="section-header page-width gallery__text--{{ text_alignment }}">
+      {% if heading != blank %}
+        <h2 class="section-header__title {{ heading_size }}">{{ heading }}</h2>
+      {% endif %}
+    </div>
+  {% endunless %}
+  {% unless full_width %}
+    <div class="page-width">
+  {% endunless %}
+  <div class="gallery__container" {{ grid_view }}>
+    {% for block in section.blocks %}
+      {% if block.type == 'image' %}
+        <figure
+          class="gallery__image gallery__image--aligned-{{ block.settings.image_align }}"
+          {{ block.shopify_attributes }}
+        >
+          {% if block.settings.image != blank %}
+            <image-lightbox>
+              <div
+                class="
+                  gallery__image-inner
+                  {% if block.settings.image_crop != 'none' %}svg-mask svg-mask--{{ block.settings.image_crop }}{% endif %}
+                "
+                {% if block.settings.image_crop != 'none' %}
+                  style="--svg-mask-ratio: {{ 100 | divided_by: block.settings.image.aspect_ratio }}%;"
+                {% endif %}
+              >
+                {%- liquid
+                  # Check lazyload setting only if images per row is less than 3
+                  ## and if it's the first 2 images
+                  if images_per_row < 3 and forloop.index < 3
+                    assign loading = lazyload_images
+                  else
+                    assign loading = true
+                  endif
+                -%}
+                {%- render 'image-element',
+                  img: block.settings.image,
+                  sizeVariable: grid_view,
+                  loading: loading,
+                  classes: 'lightbox-trigger'
+                -%}
+              </div>
+              {%- liquid
+                if block.settings.image_crop != 'none'
+                  assign classes = 'svg-mask svg-mask--' | append: block.settings.image_crop
+                else
+                  assign classes = ''
+                endif
+              -%}
+              {%- render 'lightbox', context: 'gallery', classes: classes, img: block.settings.image -%}
+            </image-lightbox>
+          {% else %}
+            <div class="gallery__placeholder-image {% if block.settings.image_crop != 'none' %}svg-mask svg-mask--{{ block.settings.image_crop }}{% endif %}">
+              {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+            </div>
+          {% endif %}
+        </figure>
+      {% endif %}
+      {% if block.type == 'app' %}
+        {% render block %}
+      {% endif %}
+    {% endfor %}
+  </div>
+  {% unless full_width %}
+    </div>
+  {% endunless %}
+</section>
