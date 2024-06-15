@@ -122,7 +122,7 @@
               {%- assign accent_exists = true -%}
               .flex-grid__item--{{ block.id }} .btn {
                 background: {{ block.settings.color_accent }} !important;
-                border: none !important;
+                border: none;
 
                 {%- assign accent_brightness = block.settings.color_accent | color_extract: 'lightness' -%}
 
