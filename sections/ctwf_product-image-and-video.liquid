@@ -1,6 +1,128 @@
+{% render 'ctwf_section-product-image-and-video',
+  section: section,
+  full_width: section.settings.full_width,
+  gutter_size: section.settings.gutter_size,
+  space_above: section.settings.space_above,
+  space_below: section.settings.space_below,
+  superscript_decimals: settings.superscript_decimals,
+  hide_block_images: section.settings.hide_block_images,
+  promo_grid_image_ratio: true
+  hydration: 'on:visible'
+%}
+
 {% schema %}
-  {
-    "name": "Section name",
-    "settings": []
+{
+  "name": "Image and video",
+  "max_blocks": 2,
+  "settings": [
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "t:labels.color_scheme",
+      "default": "1",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:labels.none"
+        },
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "t:labels.full_page_width",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "gutter_size",
+      "label": "t:labels.spacing",
+      "default": 20,
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "checkbox",
+      "id": "space_above",
+      "label": "t:actions.add_top_spacing",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "space_below",
+      "label": "t:actions.add_bottom_spacing",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_block_images",
+      "label": "t:actions.hide_all_image_blocks_mobile",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image and video"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Image displayed is last image in product media"
+        },
+        {
+          "type": "range",
+          "id": "height",
+          "label": "t:labels.height",
+          "default": 300,
+          "min": 0,
+          "max": 800,
+          "step": 20,
+          "unit": "px"
+        }
+      ]
+    },
+    {
+      "type": "video",
+      "name": "Video",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Video displayed is first video in product media"
+        },
+        {
+          "type": "range",
+          "id": "height",
+          "label": "t:labels.height",
+          "default": 300,
+          "min": 0,
+          "max": 800,
+          "step": 20,
+          "unit": "px"
+        }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": ["footer", "header", "custom.popups"]
   }
+}
 {% endschema %}
