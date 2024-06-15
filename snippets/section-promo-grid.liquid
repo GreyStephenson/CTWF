@@ -33,9 +33,14 @@
 
 <is-land {{ hydration }}>
   <div
+    class="color-scheme-{{ section.settings.color_scheme }}"
     data-section-id="{{ section.id }}"
     data-section-type="promo-grid"
   >
+    {%- if section.settings.color_scheme != 'none' -%}
+      {%- render 'color-scheme-texture', color_scheme: section.settings.color_scheme -%}
+    {%- endif -%}
+    
     {%- unless full_width -%}
       <div class="page-width">
     {%- endunless -%}
