@@ -1,6 +1,213 @@
+{%- render 'ctwf_section-text-and-image-collage',
+    section: section,
+    space_around: section.settings.space_around,
+    full_width: section.settings.full_width,
+    blocks_size: section.blocks.size,
+-%}
+
 {% schema %}
-  {
-    "name": "Section name",
-    "settings": []
+{
+  "name": "Text and image collage",
+  "max_blocks": 5,
+  "settings": [
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "t:labels.color_scheme",
+      "default": "1",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:labels.none"
+        },
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "t:labels.full_page_width",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "space_around",
+      "label": "t:actions.add_spacing_above",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text",
+      "name": "t:labels.text",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "t:labels.heading",
+          "default": "Heading text"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "label": "t:labels.heading_size",
+          "default": "h2",
+          "options": [
+            {
+              "value": "h3",
+              "label": "t:labels.sizes.small"
+            },
+            {
+              "value": "h2",
+              "label": "t:labels.sizes.medium"
+            },
+            {
+              "value": "h1",
+              "label": "t:labels.sizes.large"
+            },
+            {
+              "value": "h0",
+              "label": "t:labels.sizes.extra_large"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "text_highlight",
+          "label": "t:labels.heading_ital_text_style",
+          "info": "t:info.styles_online_apply_to_ital_text",
+          "default": "serif",
+          "options": [
+            {
+              "value": "accent-color",
+              "label": "t:labels.sales_tag_color_setting"
+            },
+            {
+              "value": "handwrite",
+              "label": "t:labels.handwriting"
+            },
+            {
+              "value": "outline",
+              "label": "t:labels.outline"
+            },
+            {
+              "value": "regular",
+              "label": "t:labels.regular"
+            },
+            {
+              "value": "serif",
+              "label": "t:labels.serif"
+            }
+          ]
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "t:labels.text",
+          "default": "<p>Pair large text with an image to tell a story, explain a detail about your product, or describe a new promotion.</p>"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "t:labels.button_text"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "t:labels.button_link"
+        }
+      ]
+    },
+    {
+      "type": "image",
+      "name": "t:labels.image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:labels.image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:labels.link"
+        },
+        {
+          "type": "select",
+          "id": "width",
+          "label": "t:labels.width",
+          "default": "100%",
+          "options": [
+            {
+              "value": "25%",
+              "label": "25%"
+            },
+            {
+              "value": "33%",
+              "label": "33%"
+            },
+            {
+              "value": "50%",
+              "label": "50%"
+            },
+            {
+              "value": "66%",
+              "label": "66%"
+            },
+            {
+              "value": "75%",
+              "label": "75%"
+            },
+            {
+              "value": "100%",
+              "label": "100%"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "alignment",
+          "label": "t:labels.vertical_alignment",
+          "default": "center",
+          "info": "t:info.aligns_next_to_custom_content",
+          "options": [
+            {
+              "value": "top-middle",
+              "label": "t:labels.alignments.top"
+            },
+            {
+              "value": "center",
+              "label": "t:labels.alignments.middle"
+            },
+            {
+              "value": "bottom-middle",
+              "label": "t:labels.alignments.bottom"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Text and image collage"
+    }
+  ],
+  "disabled_on": {
+    "groups": [
+      "custom.popups"
+    ]
   }
+}
 {% endschema %}
