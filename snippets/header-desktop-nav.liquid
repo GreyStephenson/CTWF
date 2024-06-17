@@ -136,8 +136,7 @@
                 </div>
               </div>
               {% for block in section.blocks %}
-                {%- if link.url == block.settings.feature_nav_handle -%} {% assign linktest = block.settings.feature_button_link %}
-                  {{ linktest.type }}
+                {%- if link.url == block.settings.feature_nav_handle -%}
                   {%- if block.settings.feature_button_link.type != "product_link" -%}
                   <div class="megamenu__featured">
                      <a href="{{ block.settings.feature_button_link }}" title="{{ block.settings.feature_button_text }}">
