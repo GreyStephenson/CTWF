@@ -1,0 +1,524 @@
+/**
+ * Validate all custom selectors have been made
+ */
+const customSelectTriggers = document.querySelectorAll('.custom-select-trigger');
+const addToCartButton = document.querySelector('.add-to-cart');
+
+function validateSelectors() {
+  const allSelected = Array.from(customSelectTriggers).every(
+    selector => selector.getAttribute('data-selection-made') === 'true'
+  );
+  addToCartButton.disabled = !allSelected;
+}
+
+// Initial validation check on page load
+validateSelectors();
+
+// Disable add-to-cart button if dropdown selectors are present on page load
+if (customSelectTriggers.length > 0) {
+  addToCartButton.disabled = true;
+}
+
+/**
+ * Custom select functionality
+ */
+document.querySelectorAll('.custom-select-wrapper').forEach(wrapper => {
+  const trigger = wrapper.querySelector('.custom-select-trigger');
+  const customSelect = wrapper.querySelector('.custom-select');
+
+  trigger.addEventListener('click', () => {
+    document.querySelectorAll('.custom-select').forEach(otherCustomSelect => {
+      if (otherCustomSelect !== customSelect) {
+        otherCustomSelect.classList.remove('open');
+      }
+    });
+    customSelect.classList.toggle('open');
+  });
+
+  document.addEventListener('click', event => {
+    if (!wrapper.contains(event.target)) {
+      customSelect.classList.remove('open');
+    }
+  });
+
+  wrapper.querySelectorAll('.custom-option').forEach(option => {
+    option.addEventListener('click', event => {
+      event.preventDefault();
+      trigger.textContent = option.textContent;
+      trigger.setAttribute('data-selection-made', 'true');
+      validateSelectors();
+      customSelect.classList.remove('open');
+
+      const customSelectType = wrapper.getAttribute('data-custom-select-type');
+      const dataValue = option.getAttribute('data-value');
+
+      if (customSelectType === 'single-pair') {
+        const newQuantityInput = document.createElement('input');
+        newQuantityInput.type = 'hidden';
+        newQuantityInput.name = 'quantity';
+        newQuantityInput.value = dataValue;
+        document.querySelector('form[action="/cart/add"]').appendChild(newQuantityInput);
+      } else if (customSelectType === 'linked-products' && window.location.pathname !== dataValue) {
+        window.location.href = dataValue;
+      }
+    });
+  });
+});
+
+/**
+ * Turn variant buttons into select dropdowns
+ */
+document.querySelectorAll('.variant-wrapper.dropdown-selector').forEach(dropdown => {
+  const label = dropdown.querySelector('.variant__label');
+  const optionsWrap = dropdown.querySelector('.variant-input-wrap');
+
+  label.addEventListener('click', () => {
+    document.querySelectorAll('.variant-input-wrap').forEach(otherOptionsWrap => {
+      if (otherOptionsWrap !== optionsWrap) {
+        otherOptionsWrap.classList.remove('active');
+      }
+    });
+    optionsWrap.classList.toggle('active');
+  });
+
+  document.addEventListener('click', event => {
+    if (!dropdown.contains(event.target)) {
+      optionsWrap.classList.remove('active');
+    }
+  });
+
+  optionsWrap.querySelectorAll('.variant__button-label').forEach(option => {
+    option.addEventListener('click', () => {
+      label.textContent = option.textContent;
+      label.setAttribute('data-selection-made', 'true');
+      validateSelectors();
+      optionsWrap.classList.remove('active');
+    });
+  });
+});
+
+/**
+ * Size selector functionality
+ */
+const variantJson = JSON.parse(document.querySelector('textarea[data-variant-json]').textContent.trim());
+
+function updateSelectionsAndSizes() {
+  const variantWraps = document.querySelectorAll('.variant-input-wrap');
+  let selections = {};
+  let sizeIndex;
+
+  variantWraps.forEach(wrap => {
+    const index = wrap.getAttribute('data-index');
+    const handle = wrap.getAttribute('data-handle').toLowerCase();
+    if (handle === 'size') {
+      sizeIndex = index;
+      return;
+    }
+
+    const value = wrap.querySelector('select') ? wrap.querySelector('select').value : wrap.querySelector('input[type="radio"]:checked')?.value;
+    selections[index] = value;
+  });
+
+  const filteredVariants = variantJson.filter(variant =>
+    Object.keys(selections).every(key => variant[key] === selections[key])
+  );
+
+  const sizeOptions = filteredVariants.reduce((options, variant) => {
+    options[variant[sizeIndex]] = { id: variant.id, readyToShip: !variant.title.toLowerCase().includes('made to order') };
+    return options;
+  }, {});
+
+  const madeToOrderVariant = variantJson.find(variant =>
+    variant.title.toLowerCase().includes('made to order') &&
+    Object.keys(selections).every(key => variant[key] === selections[key])
+  );
+  const madeToOrderId = madeToOrderVariant ? madeToOrderVariant.id : null;
+
+  updateSizeSelect(sizeOptions, madeToOrderId, sizeIndex);
+}
+
+function updateSizeSelect(sizeOptions, defaultId, sizeIndex) {
+  const sizeSelectTrigger = document.querySelector('.size-select-trigger');
+  const sizeOptionsContainer = document.querySelector('.size-options');
+  const hiddenSelect = document.querySelector('.product-single__variants');
+
+  const optionsHtml = [{{ settings.size_selector_ring_sizes }}].map(size => {
+    const optionInfo = sizeOptions[size];
+    const sizeId = optionInfo ? optionInfo.id : defaultId;
+    const label = optionInfo && optionInfo.readyToShip ? `${size} <span class="rts">Ready to Ship</span>` : `${size} <span class="mto">Made to Order</span>`;
+    return `<div class="size-option custom-option" data-value="${sizeId}" data-size="${size}" data-made-to-order="${!(optionInfo && optionInfo.readyToShip)}">${label}</div>`;
+  }).join('');
+
+  sizeOptionsContainer.innerHTML = optionsHtml;
+  sizeSelectTrigger.textContent = 'Select size';
+  sizeSelectTrigger.setAttribute('data-selection-made', 'false');
+  validateSelectors();
+  sizeSelectTrigger.removeAttribute('data-value');
+  sizeSelectTrigger.removeAttribute('data-size');
+  sizeSelectTrigger.removeAttribute('data-made-to-order');
+
+  sizeOptionsContainer.querySelectorAll('.size-option').forEach(option => {
+    option.addEventListener('click', function() {
+      sizeSelectTrigger.textContent = this.textContent.split(' ')[0];
+      sizeSelectTrigger.setAttribute('data-selection-made', 'true');
+      validateSelectors();
+      sizeSelectTrigger.setAttribute('data-value', this.getAttribute('data-value'));
+      sizeSelectTrigger.setAttribute('data-size', this.getAttribute('data-size'));
+      sizeSelectTrigger.setAttribute('data-made-to-order', this.getAttribute('data-made-to-order'));
+      hiddenSelect.value = this.getAttribute('data-value');
+      hiddenSelect.dispatchEvent(new Event('change'));
+
+      const form = document.querySelector('form[action="/cart/add"]');
+      let propertiesInput = form.querySelector('input[name="properties[Size]"]');
+      if (propertiesInput) propertiesInput.remove();
+
+      if (this.getAttribute('data-made-to-order') === 'true') {
+        propertiesInput = document.createElement('input');
+        propertiesInput.type = 'hidden';
+        propertiesInput.name = 'properties[Size]';
+        propertiesInput.value = this.getAttribute('data-size');
+        form.appendChild(propertiesInput);
+      }
+
+      const orderFulfillmentNotice = document.querySelector('.order-fulfillment-notice');
+      const noticeTextRTS = orderFulfillmentNotice.querySelector('.inventory--in-stock');
+      const noticeTextMTO = orderFulfillmentNotice.querySelector('.inventory--low');
+
+      if (this.getAttribute('data-made-to-order') === 'true') {
+        orderFulfillmentNotice.style.display = 'block';
+        noticeTextMTO.classList.remove('hide');
+        noticeTextMTO.style.display = 'block';
+        noticeTextRTS.classList.add('hide');
+      } else {
+        orderFulfillmentNotice.style.display = 'block';
+        noticeTextRTS.classList.remove('hide');
+        noticeTextRTS.style.display = 'block';
+        noticeTextMTO.classList.add('hide');
+      }
+
+      sizeOptionsContainer.classList.remove('open');
+      document.querySelector('.size-select').classList.remove('open');
+    });
+  });
+}
+
+updateSelectionsAndSizes();
+
+document.querySelectorAll('.variant-input-wrap select, .variant-input-wrap input[type="radio"]').forEach(input => {
+  input.addEventListener('change', () => {
+    updateSelectionsAndSizes();
+    const sizeSelectTrigger = document.querySelector('.size-select-trigger');
+    sizeSelectTrigger.textContent = 'Select size';
+    sizeSelectTrigger.removeAttribute('data-value');
+    sizeSelectTrigger.removeAttribute('data-size');
+    sizeSelectTrigger.removeAttribute('data-made-to-order');
+  });
+});
+
+
+
+
+
+{% comment %} CODE THAT WAS WORKING BEFORE OPTIMIZATION
+
+/**
+ * 
+ * 
+ * MAKE SURE SELECTIONS HAVE BEEN MADE
+ * 
+ * 
+ */
+const customSelectTriggers = document.querySelectorAll('.custom-select-trigger');
+const addToCartButton = document.querySelector('.add-to-cart');
+ 
+function validateSelectors() {
+  let allSelected = true;
+
+  customSelectTriggers.forEach(function(selector) {
+    if (selector.getAttribute('data-selection-made') !== 'true') {
+      allSelected = false;
+    }
+  });
+  
+  addToCartButton.disabled = !allSelected;
+}
+
+// Initial validation check on page load
+validateSelectors();
+
+// Disable add-to-cart button if dropdown selectors are present on page load
+if (customSelectTriggers.length > 0) {
+  addToCartButton.disabled = true;
+}
+
+/**
+ * 
+ * 
+ * CUSTOM SELECT FUNCTIONALITY
+ * 
+ * 
+ */
+const customSelectWrappers = document.querySelectorAll('.custom-select-wrapper');
+
+customSelectWrappers.forEach(wrapper => {
+  const trigger = wrapper.querySelector('.custom-select-trigger');
+  const customSelect = wrapper.querySelector('.custom-select');
+  const customOptions = wrapper.querySelectorAll('.custom-option');
+
+  trigger.addEventListener('click', () => {
+    // Close all other open dropdowns
+    customSelectWrappers.forEach(otherWrapper => {
+      if (otherWrapper !== wrapper) {
+        const otherCustomSelect = otherWrapper.querySelector('.custom-select');
+        otherCustomSelect.classList.remove('open');
+      }
+    });
+
+    // Toggle this dropdown
+    customSelect.classList.toggle('open');
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', (event) => {
+    if (!wrapper.contains(event.target)) {
+      customSelect.classList.remove('open');
+    }
+  });
+
+  customOptions.forEach(option => {
+    option.addEventListener('click', (event) => {
+      event.preventDefault();
+      trigger.textContent = option.textContent;
+      // VALIDATE VALIDATE VALIDATE
+      trigger.setAttribute('data-selection-made', 'true');
+      validateSelectors();
+      // VALIDATE VALIDATE VALIDATE
+      customSelect.classList.remove('open');
+      // Add logic here to handle the selected option value, e.g., navigate to the link
+      // Determine the functionality based on data-custom-select-type attribute
+      const customSelectType = wrapper.getAttribute('data-custom-select-type');
+      const dataValue = option.getAttribute('data-value');
+
+      if (customSelectType === 'single-pair') {
+        console.log('single or pair');
+        // Create a new input element with name="quantity" and set its value to dataValue
+        const newQuantityInput = document.createElement('input');
+        newQuantityInput.type = 'hidden';
+        newQuantityInput.name = 'quantity';
+        newQuantityInput.value = dataValue;
+
+        // Append the new input to the form or a specific container
+        const form = document.querySelector('form[action="/cart/add"]');
+        if (form) {
+          form.appendChild(newQuantityInput);
+        }
+      } else if (customSelectType === 'linked-products') {
+        // Check if the current page is already the link
+        if (window.location.pathname !== dataValue) {
+          window.location.href = dataValue;
+        }
+      }
+    });
+  });
+});
+
+
+/**
+ * 
+ * 
+ * TURN VARIANT BUTTONS INTO SELECT DROPDOWNS
+ * 
+ * 
+ */
+const dropdownSelectors = document.querySelectorAll('.variant-wrapper.dropdown-selector');
+
+dropdownSelectors.forEach(dropdown => {
+  const label = dropdown.querySelector('.variant__label');
+  const optionsWrap = dropdown.querySelector('.variant-input-wrap');
+  const options = optionsWrap.querySelectorAll('.variant__button-label');
+
+  label.addEventListener('click', () => {
+    // Close all other open dropdowns
+    dropdownSelectors.forEach(otherDropdown => {
+      if (otherDropdown !== dropdown) {
+        const otherOptionsWrap = otherDropdown.querySelector('.variant-input-wrap');
+        otherOptionsWrap.classList.remove('active');
+      }
+    });
+
+    // Toggle this dropdown
+    optionsWrap.classList.toggle('active');
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', (event) => {
+    if (!dropdown.contains(event.target)) {
+      optionsWrap.classList.remove('active');
+    }
+  });
+
+  options.forEach(option => {
+    option.addEventListener('click', () => {
+      label.textContent = option.textContent;
+      // VALIDATE VALIDATE VALIDATE
+      label.setAttribute('data-selection-made', 'true');
+      validateSelectors();
+      // VALIDATE VALIDATE VALIDATE
+      optionsWrap.classList.remove('active');
+      // Add logic here to handle the selected option value
+    });
+  });
+});
+
+
+/**
+ * 
+ * 
+ * SIZE SELECTOR
+ * 
+ * 
+ */
+// Parse the JSON data from the textarea
+const variantJson = JSON.parse(document.querySelector('textarea[data-variant-json]').textContent.trim());
+
+// Function to log the current selections and update possible sizes
+function updateSelectionsAndSizes() {
+    const variantWraps = document.querySelectorAll('.variant-input-wrap');
+    let selections = {};
+    let sizeIndex;
+
+    // Determine which data-index corresponds to "Size" and collect current selections
+    variantWraps.forEach(function(wrap) {
+        const index = wrap.getAttribute('data-index');
+        const handle = wrap.getAttribute('data-handle').toLowerCase();
+        if (handle === 'size') {
+            sizeIndex = index;
+            return; // skip size index in comparisons
+        }
+
+        let value;
+        if (wrap.querySelector('select')) {
+            value = wrap.querySelector('select').value;
+        } else {
+            const checkedRadio = wrap.querySelector('input[type="radio"]:checked');
+            value = checkedRadio ? checkedRadio.value : null;
+        }
+        selections[index] = value;
+    });
+
+    // Filter variants based on current selections (excluding "Size")
+    const filteredVariants = variantJson.filter(variant => {
+        return Object.keys(selections).every(key => variant[key] === selections[key]);
+    });
+
+    // Extract possible sizes and their IDs from the filtered variants
+    const sizeOptions = {};
+    filteredVariants.forEach(variant => {
+        sizeOptions[variant[sizeIndex]] = { id: variant.id, readyToShip: !variant.title.toLowerCase().includes('made to order') };
+    });
+
+    // Find the "Made to Order" variant that matches the current selections and get its ID
+    const madeToOrderVariant = variantJson.find(variant => 
+        variant.title.toLowerCase().includes('made to order') &&
+        Object.keys(selections).every(key => variant[key] === selections[key])
+    );
+    const madeToOrderId = madeToOrderVariant ? madeToOrderVariant.id : null;
+
+    // Update the custom select field
+    updateSizeSelect(sizeOptions, madeToOrderId, sizeIndex);
+}
+
+// Function to update the custom select field with sizes and IDs
+function updateSizeSelect(sizeOptions, defaultId, sizeIndex) {
+    const sizeSelectTrigger = document.querySelector('.size-select-trigger');
+    const sizeOptionsContainer = document.querySelector('.size-options');
+    const hiddenSelect = document.querySelector('.product-single__variants');
+
+    const optionsHtml = [{{ settings.size_selector_ring_sizes }}].map(size => {
+        const optionInfo = sizeOptions[size];
+        const sizeId = optionInfo ? optionInfo.id : defaultId;
+        const label = optionInfo && optionInfo.readyToShip ? `${size} <span class="rts">Ready to Ship</span>` : `${size} <span class="mto">Made to Order</span>`;
+        return `<div class="size-option custom-option" data-value="${sizeId}" data-size="${size}" data-made-to-order="${!(optionInfo && optionInfo.readyToShip)}">${label}</div>`;
+    }).join('');
+
+    sizeOptionsContainer.innerHTML = optionsHtml;
+
+    // Reset the custom select trigger text to "Select size"
+    sizeSelectTrigger.textContent = 'Select size';
+    // VALIDATE VALIDATE VALIDATE
+    sizeSelectTrigger.setAttribute('data-selection-made', 'false');
+    validateSelectors();
+    // VALIDATE VALIDATE VALIDATE
+    sizeSelectTrigger.removeAttribute('data-value');
+    sizeSelectTrigger.removeAttribute('data-size');
+    sizeSelectTrigger.removeAttribute('data-made-to-order');
+
+    // Handle custom select option click
+    sizeOptionsContainer.querySelectorAll('.size-option').forEach(option => {
+        option.addEventListener('click', function() {
+            sizeSelectTrigger.textContent = this.textContent.split(' ')[0];
+            // VALIDATE VALIDATE VALIDATE
+            sizeSelectTrigger.setAttribute('data-selection-made', 'true');
+            validateSelectors();
+            // VALIDATE VALIDATE VALIDATE
+            sizeSelectTrigger.setAttribute('data-value', this.getAttribute('data-value'));
+            sizeSelectTrigger.setAttribute('data-size', this.getAttribute('data-size'));
+            sizeSelectTrigger.setAttribute('data-made-to-order', this.getAttribute('data-made-to-order'));
+            hiddenSelect.value = this.getAttribute('data-value');
+            hiddenSelect.dispatchEvent(new Event('change')); // Trigger change event for hidden select
+
+            // Update or create the properties[Size] input immediately
+            const form = document.querySelector('form[action="/cart/add"]');
+            let propertiesInput = form.querySelector('input[name="properties[Size]"]');
+
+            const orderFulfillmentNotice = document.querySelector('.order-fulfillment-notice');
+            const noticeTextRTS = orderFulfillmentNotice.querySelector('.inventory--in-stock');
+            const noticeTextMTO = orderFulfillmentNotice.querySelector('.inventory--low');
+          
+            if (propertiesInput) {
+                propertiesInput.remove();
+            }
+            if (this.getAttribute('data-made-to-order') === 'true') {
+                propertiesInput = document.createElement('input');
+                propertiesInput.type = 'hidden';
+                propertiesInput.name = 'properties[Size]';
+                propertiesInput.value = this.getAttribute('data-size');
+                form.appendChild(propertiesInput);
+              
+                // Update the visibility and text of the order fulfillment notice                
+                orderFulfillmentNotice.style.display = 'block';
+                noticeTextMTO.classList.remove('hide');
+                noticeTextMTO.style.display = 'block';
+                noticeTextRTS.classList.add('hide');
+            } else {
+                // Update the visibility and text of the order fulfillment notice                
+                orderFulfillmentNotice.style.display = 'block';
+                noticeTextRTS.classList.remove('hide');
+                noticeTextRTS.style.display = 'block';
+                noticeTextMTO.classList.add('hide');
+            }
+
+            sizeOptionsContainer.classList.remove('open');
+            document.querySelector('.size-select').classList.remove('open');
+        });
+    });
+}
+
+// Log initial selections and possible sizes
+updateSelectionsAndSizes();
+
+// Set up event listeners for changes on selects and radios
+const selects = document.querySelectorAll('.variant-input-wrap select');
+const radios = document.querySelectorAll('.variant-input-wrap input[type="radio"]');
+
+[...selects, ...radios].forEach(input => {
+    input.addEventListener('change', function() {
+        updateSelectionsAndSizes();
+        // Reset the custom select trigger text to "Select size"
+        document.querySelector('.size-select-trigger').textContent = 'Select size';
+        document.querySelector('.size-select-trigger').removeAttribute('data-value');
+        document.querySelector('.size-select-trigger').removeAttribute('data-size');
+        document.querySelector('.size-select-trigger').removeAttribute('data-made-to-order');
+    });
+});
+{% endcomment %}
