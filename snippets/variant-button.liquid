@@ -51,6 +51,7 @@
   endcapture
 -%}
 
+<div class="variant-wrapper{% if show_custom_selector %} dropdown-selector{% endif %}" data-type="button" data-option-name="{{ downcased_option }}">
 
 <fieldset class="variant-input-wrap">
   <legend class="label variant__label">
@@ -145,3 +146,4 @@
   {%- endfor -%}
 </fieldset>
 
+</div>
