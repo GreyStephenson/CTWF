@@ -7,30 +7,22 @@
 
 {% if has_single_or_pair_option %}
 <div class="product-block">
-  {%- render 'ctwf_single_or_pair_selector',
-    block: block,
-    product: product,
-    form_id: form_id,
-    section_id: section_id,
-    option: option
-  -%}
-</div>
-{% endif %}
-
-<div class="variant-wrapper js">
-    {% comment %}
-  <label class="variant__label" for="size-selector">
-    {{ product.metafields.ctwf.linked_product_label }}
-  </label>
-    {% endcomment %}
-  
-  <div class="custom-select-wrapper" data-custom-select-type="single-pair">
-    <div class="custom-select">
-      <div class="custom-select-trigger" data-selection-made="false">Single or pair</div>
-      <div class="custom-options">
-        <div class="custom-option" data-value="1">Single</div>
-        <div class="custom-option" data-value="2">Pair</div>
+  <div class="variant-wrapper js">
+      {% comment %}
+    <label class="variant__label" for="size-selector">
+      {{ product.metafields.ctwf.linked_product_label }}
+    </label>
+      {% endcomment %}
+    
+    <div class="custom-select-wrapper" data-custom-select-type="single-pair">
+      <div class="custom-select">
+        <div class="custom-select-trigger" data-selection-made="false">Single or pair</div>
+        <div class="custom-options">
+          <div class="custom-option" data-value="1">Single</div>
+          <div class="custom-option" data-value="2">Pair</div>
+        </div>
       </div>
     </div>
   </div>
 </div>
+{% endif %}
