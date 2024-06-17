@@ -37,7 +37,17 @@
         when 'custom'
           render 'block-custom', block: block
         when 'share'
-          render 'block-share', block: block
+          render 'block-share', block: block       
+        when 'hint-and-gift'
+          render 'ctwf_block-hint-and-gift', block: block
+        when 'linked_products_selector'
+          render 'ctwf_block-linked_products_selector', block: block
+        when 'ring_size_selector'
+          render 'ctwf_block-ring_size_selector', block: block
+        when 'single_pair_selector'
+          render 'ctwf_block-single_pair_selector', block: block
+        when 'order_fulfillment_notice'
+          render 'ctwf_block-order_fulfillment_notice', block: block      
       endcase
     endfor
   endcapture
