@@ -4,8 +4,39 @@
     "theme_name": "Gem",
     "theme_author": "Archetype Themes",
     "theme_version": "2.1.0",
-    "theme_documentation_url": "https://archetypethemes.co/blogs/gem",
-    "theme_support_url": "https://archetypethemes.co/pages/support#gem"
+    "theme_documentation_url": "https:\/\/archetypethemes.co\/blogs\/gem",
+    "theme_support_url": "https:\/\/archetypethemes.co\/pages\/support#gem"
+  },
+  {
+    "name": "Consider The Wldflwrs",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Custom Fonts",
+        "info": "Add woff and woff2 files to Content -> Files admin and modify CSS code in ctwf.css.liquid"
+      },
+      {
+        "type": "checkbox",
+        "id": "ctwf_custom_fonts_enable",
+        "label": "Enable custom fonts",
+        "info": "Disable to use fonts in Typography settings"
+      },
+      {
+        "type": "header",
+        "content": "Size selector",
+        "info": "Override the standard variant selector"
+      },
+      {
+        "type": "text",
+        "id": "size_selector_label",
+        "label": "Label"
+      },
+      {
+        "type": "textarea",
+        "id": "size_selector_ring_sizes",
+        "label": "All size options"
+      }
+    ]
   },
   {
     "name": "t:labels.colors",
@@ -262,7 +293,6 @@
             "value": "marble.jpg",
             "label": "t:labels.marble"
           },
-
           {
             "value": "wave",
             "label": "t:labels.wave"
