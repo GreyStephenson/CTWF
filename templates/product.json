@@ -15,11 +15,6 @@
           "settings": {
           }
         },
-        "ring_size_selector_8q9Mn9": {
-          "type": "ring_size_selector",
-          "settings": {
-          }
-        },
         "variant_picker": {
           "type": "variant_picker",
           "settings": {
@@ -29,32 +24,9 @@
             "color_swatches": true
           }
         },
-        "sales_point2": {
-          "type": "sales_point",
+        "ring_size_selector_8q9Mn9": {
+          "type": "ring_size_selector",
           "settings": {
-            "icon": "truck",
-            "text": "Free returns"
-          }
-        },
-        "sales_point": {
-          "type": "sales_point",
-          "settings": {
-            "icon": "globe",
-            "text": "Free worldwide shipping"
-          }
-        },
-        "sales_point3": {
-          "type": "sales_point",
-          "settings": {
-            "icon": "leaf",
-            "text": "Carbon neutral"
-          }
-        },
-        "sales_point4": {
-          "type": "sales_point",
-          "settings": {
-            "icon": "lock",
-            "text": "Secure payments"
           }
         },
         "inventory_status": {
@@ -82,12 +54,8 @@
       "block_order": [
         "title_yHB8yh",
         "price",
-        "ring_size_selector_8q9Mn9",
         "variant_picker",
-        "sales_point2",
-        "sales_point",
-        "sales_point3",
-        "sales_point4",
+        "ring_size_selector_8q9Mn9",
         "inventory_status",
         "0cf0c446-5ac1-44ee-a1da-300e0ae994a4",
         "buy_buttons"
