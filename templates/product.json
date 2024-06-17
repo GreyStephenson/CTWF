@@ -15,6 +15,11 @@
           "settings": {
           }
         },
+        "ring_size_selector_8q9Mn9": {
+          "type": "ring_size_selector",
+          "settings": {
+          }
+        },
         "variant_picker": {
           "type": "variant_picker",
           "settings": {
@@ -77,6 +82,7 @@
       "block_order": [
         "title_yHB8yh",
         "price",
+        "ring_size_selector_8q9Mn9",
         "variant_picker",
         "sales_point2",
         "sales_point",
