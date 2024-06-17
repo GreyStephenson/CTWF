@@ -140,6 +140,10 @@
       {% if is_color %}
         data-color-swatch="{{ option.name }}"
       {% endif %}
+
+      {% if show_custom_selector %}
+        data-selection-made="false"
+      {% endif %}
     >
       {{- value | escape -}}
     </label>
