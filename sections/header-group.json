@@ -42,8 +42,9 @@
           "type": "feature",
           "settings": {
             "feature_nav_handle": "\/collections\/all-fine-jewelry",
+            "feature_image": "shopify:\/\/shop_images\/L1030411.jpg",
             "feature_button_text": "Test",
-            "feature_button_link": "shopify:\/\/products\/marquise-cluster-diamond-ring"
+            "feature_button_link": "shopify:\/\/collections\/valentines-day-gift-guide"
           }
         }
       },
