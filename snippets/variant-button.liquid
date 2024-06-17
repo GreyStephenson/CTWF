@@ -54,7 +54,7 @@
 <div class="variant-wrapper{% if show_custom_selector %} dropdown-selector{% endif %}" data-type="button" data-option-name="{{ downcased_option }}">
 
 <fieldset class="variant-input-wrap">
-  <legend class="label variant__label">
+  <legend class="label variant__label{%- if show_custom_selector %} custom-select-trigger{%- endif -%}">
     {{ option.name }}
     {%- if connect_to_sizechart and is_size -%}
       <span class="variant__label-info">
