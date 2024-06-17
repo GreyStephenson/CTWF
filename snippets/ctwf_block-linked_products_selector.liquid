@@ -16,3 +16,22 @@
   -%}
 </div>
 {% endif %}
+
+<div class="variant-wrapper js">
+    {% comment %}
+  <label class="variant__label" for="size-selector">
+    {{ product.metafields.ctwf.linked_product_label }}
+  </label>
+    {% endcomment %}
+  
+  <div class="custom-select-wrapper" data-custom-select-type="linked-products">
+    <div class="custom-select">
+      <div class="custom-select-trigger" data-selection-made="false">Select {{ product.metafields.ctwf.linked_product_label | downcase }}</div>
+      <div class="custom-options">
+        {% for product in product.metafields.ctwf.linked_product.value  %}
+        <div class="custom-option" data-value="{{ product.url }}">{{ product.title | split: "(" | last | remove: ")" }}</div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
