@@ -159,7 +159,7 @@
                     <div class="product-grid">
                       {%- liquid
                         assign mega_product = block.settings.feature_button_link.object
-                        render 'product-grid-item', product: mega_product, sizeVariable: '19vw'
+                        render 'product-grid-item', product: mega_product, enable_swatches: false, sizeVariable: '19vw'
                       -%}
                     </div>
                   </div>
