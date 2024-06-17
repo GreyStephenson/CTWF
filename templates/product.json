@@ -13,7 +13,7 @@
           "settings": {
             "variant_labels": false,
             "picker_type": "button",
-            "product_dynamic_variants_enable": true,
+            "product_dynamic_variants_enable": false,
             "color_swatches": true
           }
         },
