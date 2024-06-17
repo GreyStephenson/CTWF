@@ -158,7 +158,7 @@
                   <div class="megamenu__featured">
                     <div class="product-grid">
                       {%- liquid
-                        assign mega_product = collection_drop.products.first
+                        assign mega_product = block.settings.feature_button_link.object
                         render 'product-grid-item', product: mega_product, sizeVariable: '19vw'
                       -%}
                     </div>
