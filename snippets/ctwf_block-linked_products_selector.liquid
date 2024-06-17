@@ -1,0 +1,18 @@
+{%- liquid
+  assign has_linked_product = false
+  if product.metafields.ctwf.linked_product != blank
+    assign has_linked_product = true
+  endif
+-%}
+
+{% if has_linked_product %}
+<div class="product-block">
+  {%- render 'ctwf_linked_products_selector',
+    block: block,
+    product: product,
+    form_id: form_id,
+    section_id: section_id,
+    option: option,
+  -%}
+</div>
+{% endif %}
