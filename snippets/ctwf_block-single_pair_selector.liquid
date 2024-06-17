@@ -1,0 +1,18 @@
+{%- liquid
+  assign has_single_or_pair_option = false
+  if product.tags contains "single-and-pair-dropdown"
+    assign has_single_or_pair_option = true
+  endif
+-%}
+
+{% if has_single_or_pair_option %}
+<div class="product-block">
+  {%- render 'ctwf_single_or_pair_selector',
+    block: block,
+    product: product,
+    form_id: form_id,
+    section_id: section_id,
+    option: option
+  -%}
+</div>
+{% endif %}
