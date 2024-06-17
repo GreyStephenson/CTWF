@@ -37,10 +37,19 @@
             "desktop_logo_width": 400,
             "mobile_logo_width": 70
           }
+        },
+        "feature_PBnPem": {
+          "type": "feature",
+          "settings": {
+            "feature_nav_handle": "\/collections\/all-fine-jewelry",
+            "feature_button_text": "Test",
+            "feature_button_link": "shopify:\/\/products\/marquise-stacker"
+          }
         }
       },
       "block_order": [
-        "92d1b885-5d80-4cd6-a25a-f92b9dfd08db"
+        "92d1b885-5d80-4cd6-a25a-f92b9dfd08db",
+        "feature_PBnPem"
       ],
       "settings": {
         "main_menu_link_list": "left-menu-2021",

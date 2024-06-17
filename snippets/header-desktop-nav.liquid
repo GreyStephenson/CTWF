@@ -135,16 +135,37 @@
                   {%- endfor -%}
                 </div>
               </div>
-              {%- if is_collection -%}
-                <div class="megamenu__featured">
-                  <div class="product-grid">
-                    {%- liquid
-                      assign mega_product = collection_drop.products.first
-                      render 'product-grid-item', product: mega_product, sizeVariable: '19vw'
-                    -%}
+              {% for block in section.blocks %}
+                {%- if link.url == block.settings.feature_nav_handle -%}
+                  {%- if block.settings.feature_button_link.object != "product" -%}
+                  <div class="megamenu__featured">
+                     <a href="{{ block.settings.feature_button_link }}" title="{{ block.settings.feature_button_text }}">
+                      {%- render 'image-element'
+                        img: block.settings.feature_image,
+                        alt: block.settings.feature_button_text,
+                        sizeVariable: gridView,
+                        loading: loading
+                      -%}
+                     </a>
+                  
+                    {%- if block.settings.feature_button_text != blank -%}
+                      <a href="{{ block.settings.feature_button_link }}" class="btn btn--small btn--text">
+                      {{ block.settings.feature_button_text }}
+                      </a>
+                    {%- endif -%}
                   </div>
-                </div>
-              {%- endif -%}
+                  {%- else -%}
+                  <div class="megamenu__featured">
+                    <div class="product-grid">
+                      {%- liquid
+                        assign mega_product = collection_drop.products.first
+                        render 'product-grid-item', product: mega_product, sizeVariable: '19vw'
+                      -%}
+                    </div>
+                  </div>
+                  {%- endif -%}
+                {%- endif -%}
+              {% endfor %}
             </div>
           </div>
         </div>
