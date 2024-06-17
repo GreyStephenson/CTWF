@@ -3,6 +3,13 @@
     "main": {
       "type": "main-product",
       "blocks": {
+        "title_yHB8yh": {
+          "type": "title",
+          "settings": {
+            "vendor_enable": false,
+            "sku_enable": false
+          }
+        },
         "price": {
           "type": "price",
           "settings": {
@@ -68,6 +75,7 @@
         }
       },
       "block_order": [
+        "title_yHB8yh",
         "price",
         "variant_picker",
         "sales_point2",
