@@ -28,6 +28,14 @@
 -%}
 
 <ul class="site-nav site-navigation site-navigation--{{ nav_position }} small--hide">
+  {% for block in section.blocks %}
+    {% if block.type == 'cta' %}
+      <li class="site-nav__item site-nav__item-cta">
+        <a href="{{ block.settings.cta_button_link }}" title="{{ block.settings.cta_button_text }}">{{ block.settings.cta_button_text }}</a>
+      </li>
+    {% endif %}
+  {% endfor %}
+  
   {%- for link in main_menu.links limit: limit offset: offset -%}
     {%- liquid
       assign has_dropdown = false
