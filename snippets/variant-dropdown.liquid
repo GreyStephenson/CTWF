@@ -25,7 +25,7 @@
   assign variants_option3_arr = product.variants | map: 'option3'
 -%}
 
-<div class="variant-wrapper variant-wrapper--dropdown js" data-type="dropdown">
+<div class="variant-wrapper variant-wrapper--dropdown js" data-type="dropdown" data-option-name="{{ option.name | handleize }}">
   <label
     class="variant__label{% if option.name == 'Default' or option.name == 'Title' %} visually-hidden{% endif %}{% unless variant_labels %} visually-hidden{% endunless %}"
     for="SingleOptionSelector-{{ section.id }}-{{ product.id }}-option-{{ forloop.index0 }}"
