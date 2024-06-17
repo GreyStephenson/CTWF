@@ -1,0 +1,664 @@
+/* ==========================================================================
+   GLOBAL
+   ========================================================================== */
+/* FONTS
+   ========================================================================== */
+{% if settings.ctwf_custom_fonts_enable %}
+@font-face {
+  font-family: 'DM Mono';
+  src: url('{{ 'CTWF_DMMono-Regular.woff2' | file_url }}') format('woff2');
+      url('{{ 'CTWF_DMMono-Regular.woff' | file_url }}') format('woff');
+  font-weight: 40000;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'DM Mono';
+  src: url('{{ 'CTWF_DMMono-Medium.woff2' | file_url }}') format('woff2'),
+      url('{{ 'CTWF_DMMono-Medium.woff' | file_url }}') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Tartuffo';
+  src: url('{{ 'CTWF_Tartuffo-Thin.woff2' | file_url }}') format('woff2'),
+      url('{{ 'CTWF_Tartuffo-Thin.woff' | file_url }}') format('woff');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Ceraph';
+  src: url('{{ 'CTWF_CeraphTrial-Regular.woff2' | file_url }}') format('woff2'),
+      url('{{ 'CTWF_CeraphTrial-Regular.woff' | file_url }}') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Sequel Sans';
+  src: url('{{ 'CTWF_SequelSans-Light.woff2' | file_url }}') format('woff2'),
+      url('{{ 'CTWF_SequelSans-Light.woff' | file_url }}') format('woff');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Sequel Sans';
+  src: url('{{ 'CTWF_SequelSans-Bold.woff2' | file_url }}') format('woff2'),
+      url('{{ 'CTWF_SequelSans-Bold.woff' | file_url }}') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --typeHeaderPrimary: "Ceraph";
+  --typeBasePrimary: "Sequel Sans";
+  --typeSpecialPrimary: "DM Mono";
+}
+
+body {
+  font-variant-ligatures: common-ligatures;
+}
+
+/* Override theme.css.liquid */
+@media only screen and (min-width:769px){
+  .h0 {
+    font-size: calc(var(--typeHeaderSize)*1.4);
+  }
+}
+{% endif %}
+
+/* MISC
+   ========================================================================== */
+.hidden-element {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Override theme.css.liquid stylings that aligns section button background color/text with scheme colors */
+.color-scheme-1 .btn,
+.color-scheme-2 .btn,
+.color-scheme-3 .btn {
+  color: var(--colorBtnPrimaryText);
+  background: var(--colorBtnPrimary);
+}
+
+/* Buttons */
+.btn, a,
+.site-nav__link,
+.slide-nav__button {
+  text-transform: uppercase;
+}
+
+.btn.btn--text {
+  border-bottom: 1px solid currentColor !important;
+  color: inherit;
+  min-width: 0px;
+  padding: 0px 0px 5px 0px;
+  background: transparent !Important;
+}
+
+/* Override css-variables.liquid snippet */
+:root {
+  --btnPadding: 7px 35px;
+}
+
+/* TOOLBAR
+   ========================================================================== */
+.concave-banner-wrapper {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.concave-banner {
+  width: 100%;
+  max-width: 575px;
+  height: 100%;
+  color: {{ settings.color_button_text }};
+  background: {{ settings.color_button }};
+  clip-path: url('#announcement-clip-path');
+}
+
+.announcement-slider__content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: var(--typeSpecialPrimary);
+  font-weight: 500;
+  text-transform: uppercase;
+  padding: 15px 0px 30px 0px;
+}
+
+/* HEADER
+   ========================================================================== */ 
+.site-nav__dropdown,
+.megamenu__cols a:hover {
+  background-color: var(--colorNav);
+}
+
+.header-item--search is-land {
+  width: 100%;
+}
+
+.header-item--search .search__input-wrap input {
+  border-color: var(--colorBtnPrimary);
+}
+
+.megamenu__col-title a {
+  font-weight: 500;
+}
+
+.megamenu__featured {
+  text-align: center;
+}
+
+.megamenu__featured .btn {
+  margin-top: 10px;
+}
+
+.site-navigation {
+  position: relative;
+}
+
+.site-nav__item-cta {
+  position: absolute;
+  left: 0px;
+  font-weight: 400;
+  padding: var(--siteNavItemPaddingTopBottom) var(--siteNavItemPadding);
+  padding-left: 0px;
+}
+
+.site-nav__item-cta a {
+  color: var(--colorBtnPrimary);
+}
+
+@media only screen and (min-width: 769px) {
+  .flex-grid__item--34 {  
+    flex-basis: 34%;
+  }
+  
+  .flex-grid__item--22 {  
+    flex-basis: 22%;
+  }
+}
+
+/* FOOTER
+   ========================================================================== */ 
+.footer__blocks {
+  justify-content: space-between;
+}
+
+.footer__social {
+  display: flex;
+  gap: 20px;
+}
+
+.footer__social li {
+  margin: 0px;
+}
+
+@media only screen and (max-width: 768px) {
+  .footer__mobile-section {
+    border-top: 0px;
+  }
+  
+  .footer__blocks {
+    align-content: center;
+  }
+  
+  .footer__block[data-type=menu],
+  .footer__block--mobile {
+    flex: 1 0 100%;
+    text-align: center;
+  }
+
+  .footer__social {
+    justify-content: center;
+  }
+}
+   
+/* SECTION BORDERS
+   ========================================================================== */  
+/* Top */
+.template-index .main-content .shopify-section + .shopify-section,
+.template-index .main-content + .shopify-section {
+  border-top: 1px solid var(--colorBorder);
+}
+
+/* Bottom */
+.header-wrapper:not(header-wrapper--compressed) .site-header__element--sub[data-type="nav"],
+.header-wrapper.header-wrapper--compressed .site-header__element--top {
+  border-bottom: 1px solid var(--colorBorder);
+}
+
+.index-section {
+  margin: 0px;
+  padding: var(--indexSectionPadding) 0;
+}
+
+@media only screen and (min-width: 769px) { 
+  /* Right  */
+  .media-with-text-layout--right .media-with-text__content {
+    border-right: 1px solid var(--colorBorder);
+  }
+  
+  /* Left */
+  .media-with-text-layout--left .media-with-text__content {
+    border-left: 1px solid var(--colorBorder);
+  }
+}
+
+/* FOOTER
+   ========================================================================== */
+/* Newsletter */
+.shopify-section-group-footer-group .newsletter-section__content {
+  padding-left: 0px;
+}
+
+.shopify-section-group-footer-group .input-group-field {
+  min-width: 300px;  
+}
+
+.shopify-section-group-footer-group .newsletter__input-group {
+  max-width: none;
+}
+
+@media only screen and (max-width: 768px) { 
+  .shopify-section-group-footer-group .newsletter__input-group {
+    flex-direction: column;
+  }
+
+  .shopify-section-group-footer-group .newsletter__input-group .btn {
+    width: 100%;
+  }
+}
+
+
+/* ==========================================================================
+   SECTIONS
+   ========================================================================== */
+   
+/* TEXT AND IMAGE COLLAGE
+   ========================================================================== */
+.text-and-image-collage .page-width {
+  max-width: 80rem;
+}
+
+.text-and-image-collage .collage-content {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-column-gap: 20px;
+  grid-row-gap: 20px;
+}
+
+.text-and-image-collage .collage__item:nth-child(3) {
+  grid-area: 1 / 3 / 8 / 7;
+}
+.text-and-image-collage .collage__item:nth-child(2) {
+  grid-area: 5 / 2 / 8 / 4;
+  z-index: 1;
+}
+.text-and-image-collage .collage__item:nth-child(1) {
+  grid-area: 4 / 1 / 5 / 3;
+}
+.text-and-image-collage .collage__item:nth-child(4) {
+  grid-area: 2 / 6 / 5 / 8;
+}
+.text-and-image-collage .collage__item:nth-child(5) { 
+  grid-area: 5 / 7 / 6 / 9;
+}
+
+@media (max-width: 768px) {
+  .text-and-image-collage .collage-content {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+/* PROMO GRID
+   ========================================================================== */
+div:not(.page-width) .promo-grid .type-banner__content,
+div:not(.page-width) .promo-grid .type-banner__text {
+  align-items: flex-start;
+  text-align: left;
+}
+
+div:not(.page-width) .promo-grid .flex-grid {
+  margin-top: 0px;
+}
+
+@media (min-width: 769px) {
+  div:not(.page-width) .promo-grid .flex-grid {
+    padding-right: 0px;
+  }
+  
+  div:not(.page-width) .promo-grid .flex-grid--gutters .flex-grid__item {
+    padding-top: 0px;
+  }
+  
+  div:not(.page-width) .promo-grid .text-highlight {
+    padding-top: 9rem;
+  }
+}
+
+/* ==========================================================================
+   COLLECTIONS
+   ========================================================================== */
+.collection-content {
+  border-top: 0px;
+}
+
+/* ==========================================================================
+   PRODUCT
+   ========================================================================== */
+.page-content--product {
+  padding-top: var(--pageTopPadding);
+  padding-bottom: var(--pageTopPadding);
+}
+   
+.product-single__meta {
+  padding-top: var(--grid-gutter-small);
+}
+   
+.product-single__meta .product-block--price .variant__label {
+  display: none;
+}
+
+/* Ring size link */
+.size-chart__standalone {
+  margin-bottom: 0px;
+}
+
+/* Variant selector */
+.variant-input-wrap label.color-swatch {
+  background-size: contain;
+  box-shadow: none;
+}
+
+.variant-input-wrap input[type=radio]:focus+label {
+  outline-color: var(--colorTextBody);
+}
+
+.variant-input-wrap input[type=radio]:checked+label {
+  border-radius: 100%;
+}
+ 
+.variant-input-wrap[name="Shape"] .color-swatch {
+  border-radius: 0px;
+}
+
+/* Hide this since we create a custom size selector */
+.variant-wrapper[data-option-name="size"] {
+  display: none;
+}
+
+.variant-wrapper .variant__label {
+  text-transform: uppercase;
+}
+
+.variant-wrapper--dropdown,
+.variant-input__select {
+  width: 100%;
+  min-width: 100%;
+}
+
+/* CTWF HINT AND GIFT
+   ========================================================================== */
+.hint-and-gift .text-with-icons__block {
+  justify-content: center; 
+}
+
+.hint-and-gift .text-with-icons__block .icon {
+  width: 30px;
+  height: 30px;
+}
+
+.hint-and-gift #dropahint-cta #u_body a {
+  padding: 0px !Important;
+  color: var(--colorTextBody) !Important;
+  font-family: var(--typeBasePrimary), var(--typeBaseFallback) !Important;
+  font-size: var(--typeBaseSize) !Important;
+  letter-spacing: var(--typeBaseSpacing) !Important;
+  line-height: var(--typeBaseLineHeight) !Important;
+  -webkit-font-smoothing: antialiased !Important;
+  -webkit-text-size-adjust: 100% !Important;
+  text-rendering: optimizeSpeed !Important;
+}
+
+/* CUSTOM SELECTOR
+   ========================================================================== */
+.custom-select-wrapper {
+  position: relative;
+  display: inline-block;
+  text-align: center;
+  text-transform: uppercase;
+  width: 100%;
+}
+
+.custom-select {
+  position: relative;
+  display: block;
+  background-color: #FFF;
+  box-shadow: 0px 0px 0px 1px var(--colorBtnPrimary);
+  cursor: pointer;
+}
+
+.custom-select-trigger {
+  font-weight: 400;
+  padding: 10px;
+  position: relative;
+  padding-right: 30px; /* Add some padding to the right to make space for the caret */
+  background-image: var(--urlIcoSelect); /* Use the background image for the caret */
+  background-repeat: no-repeat;
+  background-position: right 10px center; /* Position the caret on the right side */
+  background-size: 11px; /* Size of the caret */
+}
+
+.custom-select.open .custom-select-trigger {
+  background-image: none;
+}
+
+.custom-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: #FFF;
+  box-shadow: 0px 0px 0px 1px var(--colorBtnPrimary);
+  display: none;
+  z-index: 99;
+  max-height: 250px; /* Set maximum height */
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
+.custom-option {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.size-option {
+  text-align: left;
+}
+
+.custom-option + .custom-option {
+  padding: 10px;
+  cursor: pointer;
+  border-top: 1px solid var(--colorBtnPrimary);
+}
+
+.custom-option span {
+  float: right;
+  padding: 2px 4px;
+  width: 90px;
+  text-align: center;
+  color: var(--colorBtnPrimaryText);
+  font-size: calc(var(--typeBaseSize) * .8);
+  background-color: var(--colorBtnPrimary);
+}
+
+.custom-option span.mto {
+  opacity: .5;
+}
+
+.custom-option:hover {
+  color: #FFF;
+  background-color: var(--colorBtnPrimary);
+}
+
+.custom-select.open .custom-options {
+  display: block;
+}
+
+
+/* VARIANT BUTTONS -> SELECT DROPDOWN
+   ========================================================================== */
+/* Style the dropdown container */
+.variant-wrapper.dropdown-selector {
+  position: relative; /* Necessary for positioning the dropdown */
+  text-align: center;
+  text-transform: uppercase;
+  background-color: #FFF;
+  box-shadow: 0px 0px 0px 1px var(--colorBtnPrimary);
+  cursor: pointer;
+}
+
+/* Style the selected option */
+.variant-wrapper.dropdown-selector .variant__label {
+  font-size: var(--typeBaseSize);
+  font-weight: 400;
+  padding: 10px;
+  margin: 0px;
+  position: relative;
+  padding-right: 30px; /* Add some padding to the right to make space for the caret */
+  background-image: var(--urlIcoSelect); /* Use the background image for the caret */
+  background-repeat: no-repeat;
+  background-position: right 10px center; /* Position the caret on the right side */
+  background-size: 11px; /* Size of the caret */
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Style the dropdown options */
+.variant-wrapper.dropdown-selector .variant-input-wrap {
+  display: none; /* Hide by default */
+  position: absolute;
+  min-width: 100%;
+  margin-top: 1px;
+  box-shadow: 0px 0px 0px 1px var(--colorBtnPrimary);
+  background-color: #FFF;
+  z-index: 1; /* Ensure the dropdown appears above other content */
+}
+
+.variant-wrapper.dropdown-selector .variant-input-wrap.active {
+  display: block; /* Show when active */
+}
+
+.variant-wrapper.dropdown-selector .variant__button-label {
+  display: block; /* Make options occupy full width */
+  font-weight: var(--typeHeaderWeight);
+  margin: 0px;
+  background-color: transparent;
+  border-radius: 0px !Important;
+  box-shadow: none !Important;
+}
+
+.variant-wrapper.dropdown-selector .variant__button-label:hover {
+  background-color: #f5f5f5; /* Hover effect */
+}
+  
+/* Style dropdown options to be full-width */
+.variant-wrapper.dropdown-selector .variant-input-wrap .variant-input {
+  display: flex; /* Use flexbox for better alignment */
+  width: 100%;    /* Ensure options take full width */
+}
+
+/* Style the option labels to appear as separate lines */
+.variant-wrapper.dropdown-selector .variant__button-label {
+  width: 100%;       /* Make the labels full width */
+  padding: 10px;  /* Add some padding for better visual appearance */
+  box-sizing: border-box; /* Include padding in the element's total width */
+}
+
+.variant-wrapper.dropdown-selector .variant-input + .variant-input {
+  border-top: 1px solid var(--colorBtnPrimary);
+}
+
+/* ORDER FULFILLMENT NOTICE
+   ========================================================================== */
+.order-fulfillment-notice {
+  display: none;  /* Hide on load */
+}
+
+/* UNBRIDALED APP
+   ========================================================================== */
+#unbridaled-container .ub-ds-root .unbridaled-nice-select.unbridaled-swatch-selects {
+  max-width: 100%;
+  margin-bottom: 30px;
+  border: 0px;
+  box-shadow: 0px 0px 0px 1px var(--colorBtnPrimary);
+}
+
+#unbridaled-container .unbridaled-ring-size-label.ring-size-label {
+  display: none;
+}
+
+#unbridaled-container .ub-ds-root .unbridaled-nice-select.unbridaled-swatch-selects .unbridaled-current,
+#unbridaled-container .ub-ds-root .unbridaled-nice-select.unbridaled-swatch-selects .unbridaled-list .unbridaled-option span {
+  text-transform: uppercase;
+  font-size: var(--typeBaseSize);
+  text-align: center;
+}
+
+#unbridaled-container .ub-ds-root .unbridaled-diamond-swatch {
+  margin-bottom: 30px;
+}
+
+#unbridaled-container .ub-ds-root .unbridaled-nice-select .unbridaled-list,
+#unbridaled-container .ub-ds-root .unbridaled-nice-select .unbridaled-option.option {
+  box-shadow: 0px 0px 0px 1px var(--colorBtnPrimary);
+}
+
+#unbridaled-container .ub-ds-root .unbridaled-nice-select .unbridaled-option.option + .unbridaled-option.option {
+  box-shadow: 0px 1px 0px 0px var(--colorBtnPrimary);
+}
+
+#unbridaled-container .ub-ds-root .unbridaled-nice-select:after {
+  right: 0px;
+  top: 0px;
+  font-size: var(--typeBaseSize);
+  font-weight: 400;
+  padding: 20px;
+  margin: 0;
+  border: 0px;
+  background-image: var(--urlIcoSelect);
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 11px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* AFFIRM MESSAGING
+   ========================================================================== */
+#shopify-block-affirm_pay_over_time_messaging_product_block_cCBJcP {
+  margin: -30px 0px 30px 0px;  
+}
