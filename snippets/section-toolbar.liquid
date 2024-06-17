@@ -40,6 +40,8 @@
 <is-land {{ hydration }}>
   <toolbar-section data-section-id="{{ section.id }}" data-section-type="toolbar">
     <div class="toolbar">
+      {%- render 'ctwf_announcement-bar-banner', section: section -%}
+      
       <div class="page-width">
         <div class="toolbar__content">
           {%- render 'announcement-bar' -%}
